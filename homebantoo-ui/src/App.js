@@ -8,7 +8,7 @@ import Home from './components/Home';
 import AddInventoryItem from './components/AddInventoryItem';
 import InventoryList from './components/InventoryList';
 import ExpiringSoonList from './components/ExpiringSoonList';
-
+import SearchResults from './components/SearchResults';
 
 axios.defaults.baseURL = 'http://localhost:4000';
 
@@ -23,7 +23,8 @@ const App = () => {
             <Route path="/add-inventory" element={<AddInventoryItem />} />
             <Route path="/inventory-list" element={<InventoryList />} />
             <Route path="/expiring-soon-list" element={<ExpiringSoonList />} />
-          
+            <Route path="/search-results" element={<SearchResults />} />
+            
           </Routes>
         </div>
       </Router>

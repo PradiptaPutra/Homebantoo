@@ -6,7 +6,7 @@ body {
 }
 
 h1 {
-  color: red.500; /* Chakra color name for red */
+  color: rgb(255, 0, 0).500; /* Chakra color name for red */
 }
 
 h2 {
@@ -19,7 +19,7 @@ input {
 }
 
 button {
-  background-color: green.500; /* Chakra color name for green */
+  background-color: rgb(128, 0, 0).500; /* Chakra color name for green */
   color: white;
   padding: 12px 24px;
   border: none;
@@ -29,7 +29,7 @@ button {
 }
 
 button:hover {
-  background-color: green.600; /* Slightly darker green on hover */
+  background-color: rgb(128, 0, 0).600; /* Slightly darker green on hover */
 }
 
 ul {

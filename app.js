@@ -110,11 +110,17 @@ app.get('/api/expiring-soon', async (req, res) => {
 
 app.get('/api/search-recipes', async (req, res) => {
   try {
-    // Ambil bahan makanan dari inventaris pengguna
-    const allItems = await InventoryItem.find();
-    const ingredients = allItems.map(item => item.name).join(',');
+    let ingredients = '';
 
-    // Gunakan Spoonacular API untuk mencari resep berdasarkan bahan
+    // Check if the user has specified ingredients in the query
+    if (req.query.query) {
+      ingredients = req.query.query;
+    } else {
+      // If not specified, fetch ingredients from the user's inventory
+      const allItems = await InventoryItem.find();
+      ingredients = allItems.map(item => item.name).join(',');
+    }
+
     const response = await axios.get(
       `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredients}&number=5&apiKey=f74cd035d91a4a079f88b50e5e0716aa`
     );
@@ -123,21 +129,22 @@ app.get('/api/search-recipes', async (req, res) => {
     res.json(recipes);
   } catch (error) {
     console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
-    // Tambahkan kode untuk menangani kesalahan Spoonacular API
-    if (error.response) {
-      // Kesalahan dari server Spoonacular (non-2xx response)
-      console.error('Spoonacular API Error:', error.response.status, error.response.data);
-      res.status(error.response.status).json({ message: 'Spoonacular API Error' });
-    } else if (error.request) {
-      // Tidak ada respons dari server Spoonacular
-      console.error('No response from Spoonacular API');
-      res.status(500).send('Internal Server Error');
-    } else {
-      // Kesalahan lainnya
-      console.error('Other error', error.message);
-      res.status(500).send('Internal Server Error');
-    }
+// Endpoint for searching recipes without considering user's inventory
+app.get('/api/search-recipes-general', async (req, res) => {
+  try {
+    const response = await axios.get(
+      `https://api.spoonacular.com/recipes/complexSearch?number=5&apiKey=f74cd035d91a4a079f88b50e5e0716aa`
+    );
+
+    const recipes = response.data.results;
+    res.json(recipes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
   }
 });
 

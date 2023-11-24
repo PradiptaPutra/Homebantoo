@@ -1,33 +1,58 @@
-// components/SearchResults.js
 import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { Box, Heading, Image, Text, UnorderedList, ListItem, Center } from '@chakra-ui/react';
 
-const SearchResults = ({ results }) => {
+const SearchResults = () => {
+  const location = useLocation();
+  const results = location.state?.results;
+
+  if (!results) {
+    // Handle the case when results are undefined
+    return <p>No results found</p>;
+  }
+
   return (
-    <div>
-      <h1>Search Results</h1>
-      <ul>
+    <Box p={4}>
+      <Heading as="h1" mb={4} fontFamily="Ubuntu">
+        Search Results
+      </Heading>
+      <UnorderedList listStyleType="none" p={0}>
         {results.map((result) => (
-          <li key={result.id}>
-            <img src={result.image} alt={result.title} />
-            <p>Title: {result.title}</p>
-            <p>Likes: {result.likes}</p>
-            <p>Missed Ingredient Count: {result.missedIngredientCount}</p>
-            <h3>Missed Ingredients:</h3>
-            <ul>
-              {result.missedIngredients.map((ingredient) => (
-                <li key={ingredient.id}>{ingredient.name}</li>
-              ))}
-            </ul>
-            <h3>Used Ingredients:</h3>
-            <ul>
-              {result.usedIngredients.map((ingredient) => (
-                <li key={ingredient.id}>{ingredient.name}</li>
-              ))}
-            </ul>
-          </li>
+          <ListItem key={result.id} mb={8} p={4} borderBottom="1px" borderColor="gray.200">
+            <Center>
+              {result.image && <Image src={result.image} alt={result.title} maxW="200px" mb={4} />}
+            </Center>
+            <Text fontFamily="Ubuntu" fontSize="xl" fontWeight="bold">
+              Title: {result.title}
+            </Text>
+            <Text>Likes: {result.likes}</Text>
+            <Text>Missed Ingredient Count: {result.missedIngredientCount}</Text>
+            <Box>
+              <Text as="h3" fontFamily="Ubuntu" fontSize="lg" fontWeight="bold" mb={2}>
+                Missed Ingredients:
+              </Text>
+              <UnorderedList>
+                {result.missedIngredients &&
+                  result.missedIngredients.map((ingredient) => (
+                    <ListItem key={ingredient.id}>{ingredient.name}</ListItem>
+                  ))}
+              </UnorderedList>
+            </Box>
+            <Box>
+              <Text as="h3" fontFamily="Ubuntu" fontSize="lg" fontWeight="bold" mb={2}>
+                Used Ingredients:
+              </Text>
+              <UnorderedList>
+                {result.usedIngredients &&
+                  result.usedIngredients.map((ingredient) => (
+                    <ListItem key={ingredient.id}>{ingredient.name}</ListItem>
+                  ))}
+              </UnorderedList>
+            </Box>
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </UnorderedList>
+    </Box>
   );
 };
 
